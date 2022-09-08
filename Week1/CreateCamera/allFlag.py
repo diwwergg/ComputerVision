@@ -3,6 +3,16 @@ import matplotlib.pyplot as plt
 import cv2
 
 
+def thai():
+    R = np.zeros((100, 900, 3), dtype=np.uint8)
+    R[:, :] = [239, 51, 64]
+    W = np.zeros((100, 900, 3), dtype=np.uint8)
+    W[:, :] = [255, 255, 255]
+    B = np.zeros((200, 900, 3), dtype=np.uint8)
+    B[:, :] = [0, 36, 125]
+    Thai = np.vstack((R, W, B, W, R))
+    return Thai
+
 def germany():
     Red = np.zeros((100, 500, 3), dtype=np.uint8)
     Red[:, :] = [211, 0, 0]
@@ -35,20 +45,30 @@ def italy():
     Italy = np.hstack((G, W, R))
     return Italy
 
-# def japan():
-#     Japan = np.full((400, 600, 3), 255, np.uint8)
-#     for x in range(Japan.shape[1]):
-#         for y in range(Japan.shape[0]):
-#             if (x-50)
+def japan():
+    Japan = np.full((400, 600, 3), 255, np.uint8) # (x, y, (255, 255, 255))
+    for x in range(Japan.shape[1]):
+        for y in range(Japan.shape[0]):
+            if (x-(Japan.shape[1]/2))**2 + (y-(Japan.shape[0]/2))**2 < (Japan.shape[0]*3/10)**2:
+                Japan[y, x, :] = [156, 0, 0]
+    return Japan
+
+
+plt.figure()
+plt.imshow(thai())
+
 plt.figure()
 plt.imshow(germany())
 
 plt.figure()
 plt.imshow(france())
-# plt.axis(False)
+# plt.axis(False) # command not show axis x, y
 
 plt.figure()
 plt.imshow(italy())
+
+plt.figure()
+plt.imshow(japan())
 plt.show()
 
 
