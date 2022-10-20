@@ -22,14 +22,14 @@ while True:
     L_act = False
     R_act = False
     if prev_frame is not None and iframe > 20:
-        diffL = cv2.absdiff(prev_frame[:, L:L+L_thick], frame[:, L:L+L_thick])
+        diffL = cv2.absdiff(prev_frame[:, L:L + L_thick], frame[:, L:L + L_thick])
         diffR = cv2.absdiff(prev_frame[:, R:R + R_thick], frame[:, R:R + R_thick])
         # IN
         if diffL.sum() > 80000:
             L_act = True
-            L_count = L_count+1
+            L_count = L_count + 1
         else:
-            if ( L_count > 0 ):
+            if (L_count > 0):
                 if L_on is True and R_on is False:
                     R_on = True
                     Out_people = Out_people + 1
@@ -38,15 +38,15 @@ while True:
                 elif L_on is True and R_on is True:
                     L_on = False
 
-                # print('R:', R_on, '  L:', L_on)
+                print('R:', R_on, '  L:', L_on)
             L_count = 0
 
         # OUT
         if diffR.sum() > 80000:
             R_act = True
-            R_count = R_count+1
+            R_count = R_count + 1
         else:
-            if (R_count > 0) :
+            if (R_count > 0):
                 if L_on is False and R_on is True:
                     L_on = True
                     In_people = In_people + 1
@@ -55,9 +55,8 @@ while True:
                 elif L_on is True and R_on is True:
                     R_on = False
 
-                # print('R:', R_on, '  L:', L_on)
+                print('R:', R_on, '  L:', L_on)
             R_count = 0
-
 
         # cv2.imshow('diffR', diffR)
 
@@ -70,7 +69,14 @@ while True:
         frame[:, R:R + R_thick, :2] = 0
     else:
         frame[:, R:R + R_thick, [0, 2]] = 0
-    frame = cv2.putText(frame, ('In :' + str(In_people)), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA, False )
-    frame = cv2.putText(frame, ('Out :' + str(Out_people)), (500, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA, False)
+    frame = cv2.putText(frame, ('In :' + str(In_people)), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2,
+                        cv2.LINE_AA, False)
+    frame = cv2.putText(frame, ('Out :' + str(Out_people)), (500, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2,
+                        cv2.LINE_AA, False)
     cv2.imshow('frame', frame)
     cv2.waitKey(1)
+    if ((L_on is False or R_on is False) and iframe > 300):
+        L_on = True
+        R_on = True
+        print('clear  R:', R_on, '  L:', L_on)
+        iframe = 0
