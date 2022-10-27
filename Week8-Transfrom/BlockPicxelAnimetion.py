@@ -29,10 +29,7 @@ BlockL = transform(BlockL, TA1)
 TB1 = np.array([[1, 0, 10], [0, 1, 40], [0, 0, 1]])
 BlockSquare = transform(BlockSquare, TB1)
 
-
-
 time = [True] * 20
-
 while True:
     # Start Down Block L
     if time[0]:
@@ -59,6 +56,7 @@ while True:
 
         showBlock()
         time[1] = False
+
     #  Down Block L
     if time[2]:
         while BlockL[1][1] > 0:
