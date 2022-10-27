@@ -34,7 +34,7 @@ BlockSquare = transform(BlockSquare, TB1)
 time = [True] * 20
 
 while True:
-    # Start Down Block A
+    # Start Down Block L
     if time[0]:
         for y in range(10):
             TA2 = np.array([[1, 0, 0], [0, 1, -1], [0, 0, 1]])
@@ -42,7 +42,7 @@ while True:
             showBlock()
         time[0] = False
 
-    #   Rotation BlockA
+    #   Rotation Block L
     if time[1]:
         # Set 0, 0
         centroid = BlockL[3]
@@ -59,7 +59,7 @@ while True:
 
         showBlock()
         time[1] = False
-    #  Down Block A
+    #  Down Block L
     if time[2]:
         while BlockL[1][1] > 0:
             TA2 = np.array([[1, 0, 0], [0, 1, -0.5], [0, 0, 1]])
