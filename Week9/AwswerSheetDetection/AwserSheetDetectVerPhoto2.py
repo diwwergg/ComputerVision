@@ -7,14 +7,14 @@ from skimage import measure, morphology
 # import utils file from Week9
 import utils as ut
 
-file_path = 'papersheet2.jpg'
-sizepaper = (500,600)
+file_path = 'papersheet1.jpg'
+sizepaper = (500,700)
 image = cv2.imread(file_path)  #take input of image
 org = image.copy()
 
 #Resize the image for better and fast processing
 r = 700.0 / image.shape[1]
-dim = (int(image.shape[1]*r),700)
+dim = (int(image.shape[1]*r),1200)
 image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
 image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 image = cv2.bilateralFilter(image, 5, 21, 21) #Blur the image for better edge detection
