@@ -7,7 +7,7 @@ from skimage import measure, morphology
 # import utils file from Week9
 import utils as ut
 
-file_path = 'papersheet1.jpg'
+file_path = 'papersheet4.jpg'
 sizepaper = (500,700)
 image = cv2.imread(file_path)  #take input of image
 org = image.copy()
@@ -16,6 +16,7 @@ org = image.copy()
 r = 700.0 / image.shape[1]
 dim = (int(image.shape[1]*r),1200)
 image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
+copy = image.copy()
 image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 image = cv2.bilateralFilter(image, 5, 21, 21) #Blur the image for better edge detection
 #Edge detection using canny algorithm
@@ -35,7 +36,6 @@ for c in contours:
         Main_contour = no_of_points_found
         print(Main_contour)
         break
-copy = img.copy()
 img = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 cv2.drawContours(img,[Main_contour],-1,(0,255,0),2)
 cv2.imshow("Main outline",img)
@@ -46,19 +46,18 @@ topleft = Main_contour[1][0]
 topRight = Main_contour[0][0]
 bottomLeft = Main_contour[2][0]
 bottomRight = Main_contour[3][0]
-pointers = (topleft,topRight,bottomLeft,bottomRight)
-print(pointers)
 pointers1 = np.float32([topleft,topRight,bottomLeft,bottomRight])
 
 pointers2 = np.float32([[0, 0],[sizepaper[0], 0],[0, sizepaper[1]],[sizepaper[0],sizepaper[1]]])
 
 matrix = cv2.getPerspectiveTransform(pointers1,pointers2)
-cropper = cv2.warpPerspective(image,matrix,sizepaper)
+cropper = cv2.warpPerspective(copy,matrix,sizepaper)
 
 imgList = [org, image, edged, img, cropper]
 imgTitle = ['Original', 'GrayScaledAndBlurred', 'EdgedCanny', 'Main outline', 'cropper']
-ut.show_image_list(imgList, imgTitle, 2, 3)
-
-plt.figure('cropper')
-plt.imshow(cropper, cmap='gray')
+ut.show_image_list_plt(imgList, imgTitle, 2, 3)
 plt.show()
+
+cv2.imshow('cropper',cropper)
+cv2.imwrite('cropper.jpg',cropper)
+cv2.waitKey(0)

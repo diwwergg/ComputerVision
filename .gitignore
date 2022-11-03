@@ -4,3 +4,5 @@
 /.idea/
 *.pyc
 *.pyo
+*/_pycache_/
+
