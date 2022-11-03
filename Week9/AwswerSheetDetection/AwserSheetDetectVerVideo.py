@@ -1,11 +1,6 @@
-from ctypes import pointer
-from tkinter import image_names
-from turtle import right
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from skimage import measure, morphology
-# import utils file from Week9
 import utils as ut
 
 def find_big_rectangle(contours):
@@ -64,7 +59,7 @@ def check_small_rectangles(contours, area_size=800):
     
 # sizepaper = (500,700)
 sizepaper = (widthImg, heightImg) = (500, 700)
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 video = True
 
 ut.initializetrackbars()
@@ -91,38 +86,9 @@ while True:
         cv2.imshow("Cropped",cropper_paper)
         imageResult = cropper_paper.copy()
         # WRAPPER SMALL RECTANGLES IN PAGE
-        ## FIND ALL COUNTOURS SMALL RECTANGLES
-        imgGray = cv2.GaussianBlur(imageResult, (7, 7), 0)
-        """ imgGray = cv2.bilateralFilter(imgGray, d=5,sigmaColor=10,sigmaSpace=10) #Blur the image for better edge detection """
-        imgThresh = cv2.adaptiveThreshold(imgGray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,blockSize=13,C=3)
-        thres, area_size = ut.valtrackbars()  # GET TRACK BAR VALUES FOR THRESHOLDS
-        imgThresholdCanny = cv2.Canny(imgGray, thres[0], thres[1])
-        kernel = np.ones((2, 2))
-        imgDial = cv2.dilate(imgThresholdCanny, np.ones((2, 2)), iterations=2)  # APPLY DILATION
-        imgThresholdCanny2 = cv2.erode(imgDial, kernel, iterations=1)  # APPLY EROSION
-
-        # cv2.imshow("Canny", imgThresholdCanny)
-        # cv2.imshow("imgDial", imgDial)
-        # cv2.imshow("imgThresholdCanny2", imgThresholdCanny2)
-        # cv2.waitKey(1)
-
-        imgContours = imageResult.copy()  # COPY IMAGE FOR DISPLAY PURPOSES
-        imgBigContour = imageResult.copy()  # COPY IMAGE FOR DISPLAY PURPOSES
-        contours, hierarchy = cv2.findContours(imgThresholdCanny2, cv2.RETR_EXTERNAL,
-                                            cv2.CHAIN_APPROX_SIMPLE)  # FIND ALL CONTOURS
-        rectengleCnt = []
-        for cnt in contours:
-            area = cv2.contourArea(cnt)
-            if area < area_size:
-                peri = cv2.arcLength(cnt, True)
-                approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
-                if len(approx) == 4:
-                    rectengleCnt.append(cnt)
-        cv2.drawContours(imgContours, rectengleCnt,-1,(0,255,0),2)
-        cv2.imshow("Contours", imgContours)
         cv2.waitKey(1)
-        
-        
+        cv2.imwrite('cropper.jpg', imageResult)
+
         
         
         
